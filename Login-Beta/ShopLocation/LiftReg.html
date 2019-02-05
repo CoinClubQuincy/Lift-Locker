@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: black;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 16px;
+  background-color: white;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.registerbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+.registerbtn:hover {
+  opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+  color: dodgerblue;
+}
+
+/* Set a grey background color and center the text of the "sign in" section */
+.signin {
+  background-color: #f1f1f1;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<form method="POST" action="LiftRegisterserver.php">
+      <script>
+      function changeSrc3()
+      {
+       var oiFrame1 = document.getElementById('mIframe');
+       oiFrame.src = 'RegisterdLifts.php';
+      }
+
+      function changeSrc3()
+      {
+       window.location = 'RegisterdLifts.php';
+      }
+      </script>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+<div class="w3-container">
+
+<p><button onclick='changeSrc3();' class="w3-btn w3-block w3-yellow w3-left-align"> Back</button></p>
+
+</div>
+
+</body>
+<div class="container">
+  <h1>Register New Lift</h1>
+  <div class="w3-container">
+    </div>
+    <p>Please fill in this form to create new lift.</p>
+    <hr>
+
+    <script>
+    function changeSrc()
+    {
+     var oiFrame1 = document.getElementById('mIframe');
+     oiFrame.src = 'RegisterdLifts.php';
+    }
+
+    function changeSrc()
+    {
+     window.location = 'RegisterdLifts.php';;
+    }
+    </script>
+
+    <label for="bay"><b>Bay</b></label>
+    <input type="text" placeholder="use two digits...01,02,03,etc" name="Bay" required>
+
+    <label for="LB"><b>Lift Brand</b></label>
+    <input type="text" placeholder="Select Lift brand" name="Brand" required>
+
+    <label for="LC"><b>Lift Capacity</b></label>
+    <input type="text" placeholder="Enter lift capacity" name="Capacity" required>
+    <hr>
+
+    <label for="LT"><b>Lift Type</b></label>
+    <input type="text" placeholder="Enter lift Type" name="LiftType" required>
+    <hr>
+
+    <label for="S"><b>Serial</b></label>
+    <input type="text" placeholder="Enter lift capacity" name="Serial" required>
+    <hr>
+
+    <label for="LC"><b>Registration Notes</b></label>
+    <input type="text" placeholder="Enter any notes" name="Notes" required>
+    <hr>
+
+    <button onclick='changeSrc()' type="submit" name="go" class="registerbtn">Register</button>
+  </div>
+
+
+</form>
+
+</body>
+</html>

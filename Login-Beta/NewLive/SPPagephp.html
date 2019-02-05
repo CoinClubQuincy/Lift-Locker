@@ -1,0 +1,23 @@
+<?php
+  include_once 'includes/SPPage.conn.php'
+?>
+
+
+<!DOCTYPE html>
+<html>
+
+<?php
+      $sql = "SELECT * FROM SPADash;";
+      $result = mysqlquery($conn, $sql);
+      $resultCheck = mysqli_num_rows($result)
+
+      if ($resultChck > 0)
+      {                                                      // output data of each row
+        while($rows=mysqli_fetch_assoc($result))
+        {
+          echo "<tr>".$rows["Bay"] ."</td><td>". $rows["Model"] ."</td><td>". $rows["Serial"] ."</td><td>" .$rows["Description"] ."</td></tr>";
+        }
+
+      } else { echo "0 results"; }
+ ?>
+</html>

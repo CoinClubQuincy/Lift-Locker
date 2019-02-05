@@ -1,0 +1,125 @@
+<?php
+
+  $servername = "35.225.125.47";
+  $username = "Q";
+  $password = "Quincy2222";
+  $database = "coreleft";
+
+  $conn = mysqli_connect($servername, $username, $password, $database);
+
+  $sql ="SELECT * FROM ShopLocation";
+  $result = mysqli_query($conn, $sql) or die(mysqli_error($myConnection)); ;
+
+?>
+
+<!DOCTYPE html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .top-container {
+      background-color: #f1f1f1;
+        padding: 30px;
+          text-align: center;
+          }
+
+          .sticky {
+            padding: 0px 10px;
+              background: #555;
+                color: #f1f1f1;
+                }
+
+                .content {
+                  padding:16px;
+                  }
+
+                  .sticky {
+                    position: fixed;
+                      top: 0;
+                        width: 100%;
+                        }
+
+                        .sticky + .content {
+                          padding-top: 102px;
+                          }
+                          </style>
+                          </head>
+                          <body>
+
+                           <div class="content">
+                           <head>
+                           <meta name="viewport" content="width=device-width, initial-scale=1">
+                           <style>
+                            table {
+                                                                                                                                                            border-collapse: collapse;
+                                                                                                                                                                                                                     border-spacing: 0;
+                                                                                                                                                                                                                                                         width: 100%;
+                                                                                                                                                                                                                                                                                               border: 1px solid #ddd;
+                                                                                                                                                                                                                                                                                                                                     }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                 th, td {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                         text-align: left;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   padding: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 tr:nth-child(even){background-color: #f2f2f2}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </style>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </head>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <body>
+
+                          <div align="center" class="sticky" id="myHeader222">
+                            <h2>Shop Locations</h2>
+                            </div>
+
+                            <div style="width:500px;height:40px;border:1px solid #000;">This is a rectangle!</div>
+
+                            <div>
+                                <table>
+                                  <tr>
+                                  <th>Location Name</th>
+                                  <th>Location Address</th>
+                                  <th>Phone Number</th>
+                                 </tr>
+
+                                 <tbody  style="overflow-x:auto;">
+                                 <?php
+                                     while($rows=mysqli_fetch_assoc($result))
+                                   {
+                                 ?>
+                                     <tr>
+                                       <td><?php echo $rows['LocationName']; ?></td>
+                                       <td><?php echo $rows['LocationAddress']; ?></td>
+                                       <td><?php echo $rows['PhoneNumb']; ?></td>
+                                    </tr>
+                                    <?php
+                                      }
+                                      ?>
+                              </table>
+                                </table>
+                                 </div>
+
+
+
+                                <script>
+                                window.onscroll = function() {myFunction()};
+
+                                var header = document.getElementById("myHeader222");
+                                var sticky = header.offsetTop;
+
+                                function myFunction() {
+                                  if (window.pageYOffset > sticky) {
+                                      header.classList.add("sticky");
+                                        } else {
+                                            header.classList.remove("sticky");
+                                              }
+                                              }
+                                              </script>
+
+                                              </body>
+
+<body style="background-color:#FFFFFF;">
+</body>

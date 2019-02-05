@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>freeboard</title>
+	<meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content = "width = device-width, initial-scale = 1, user-scalable = no" />
+    <link href="css/freeboard.min.css" rel="stylesheet" />
+    <script src="js/freeboard.thirdparty.min.js"></script>
+    <script type="text/javascript">
+        head.js("js/freeboard_plugins.min.js",
+                // *** Load more plugins here ***
+                function(){
+                    $(function()
+                    { //DOM Ready
+                        freeboard.initialize(true);
+
+                        var hashpattern = window.location.hash.match(/(&|#)source=([^&]+)/);
+                        if (hashpattern !== null) {
+                            $.getJSON(hashpattern[2], function(data) {
+                                freeboard.loadDashboard(data, function() {
+                                    freeboard.setEditing(false);
+                                });
+                            });
+                        }
+
+                    });
+                });
+    </script>
+</head>
+<body>
+<div id="board-content">
+    <img id="dash-logo" data-bind="attr:{src: header_image}, visible:header_image()">
+    <div class="gridster responsive-column-width">
+        <ul data-bind="grid: true">
+        </ul>
+    </div>
+</div>
+<header id="main-header" data-bind="if:allow_edit">
+    <div id="admin-bar">
+        <div id="admin-menu">
+            <div id="board-tools">
+                <img src="dis is it.jpg" height="85" />
+                <div id="board-actions">
+                    <ul class="board-toolbar vertical">
+                        <li data-bind="click: loadDashboardFromLocalFile"><i id="full-screen-icon" class="icon-folder-open icon-white"></i><label id="full-screen">Load Freeboard</label></li>
+                        <li><i class="icon-download-alt icon-white"></i>
+                            <label data-bind="click: saveDashboardClicked">Login</label>
+                        </li>
+                        <li id="add-pane" data-bind="click: createPane"><i class="icon-plus icon-white"></i><label>Register</label></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="datasources">
+                <h2 class="title">Logs</h2>
+
+                <div class="datasource-list-container">
+                    <table class="table table-condensed sub-table" id="datasources-list" data-bind="if: datasources().length">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Last Updated</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody data-bind="foreach: datasources">
+                        <tr>
+                            <td>
+                                <span class="text-button datasource-name" data-bind="text: name, pluginEditor: {operation: 'edit', type: 'datasource'}"></span>
+                            </td>
+                            <td data-bind="text: last_updated"></td>
+                            <td>
+                                <ul class="board-toolbar">
+                                    <li data-bind="click: updateNow"><i class="icon-refresh icon-white"></i></li>
+                                    <li data-bind="pluginEditor: {operation: 'delete', type: 'datasource'}">
+                                        <i class="icon-trash icon-white"></i></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <span class="text-button table-operation" data-bind="pluginEditor: {operation: 'add', type: 'datasource'}">ADD</span>
+            </div>
+        </div>
+    </div>
+	<div id="column-tools" class="responsive-column-width">
+		<ul class="board-toolbar left-columns">
+			<li class="column-tool add" data-bind="click: addGridColumnLeft"><span class="column-icon right"></span><i class="icon-arrow-left icon-white"></i></li>
+			<li class="column-tool sub" data-bind="click: subGridColumnLeft"><span class="column-icon left"></span><i class="icon-arrow-right icon-white"></i></li>
+		</ul>
+		<ul class="board-toolbar right-columns">
+			<li class="column-tool sub" data-bind="click: subGridColumnRight"><span class="column-icon right"></span><i class="icon-arrow-left icon-white"></i></li>
+			<li class="column-tool add" data-bind="click: addGridColumnRight"><span class="column-icon left"></span><i class="icon-arrow-right icon-white"></i></li>
+		</ul>
+	</div>
+    <div id="toggle-header" data-bind="click: toggleEditing">
+        <i id="toggle-header-icon" class="icon-wrench icon-white"></i></div>
+</header>
+
+<div style="display:hidden">
+    <ul data-bind="template: { name: 'pane-template', foreach: panes}">
+    </ul>
+</div>
+
+<script type="text/html" id="pane-template">
+    <li data-bind="pane: true">
+        <header>
+            <h1 data-bind="text: title"></h1>
+            <ul class="board-toolbar pane-tools">
+                <li data-bind="pluginEditor: {operation: 'add', type: 'widget'}">
+                    <i class="icon-plus icon-white"></i>
+                </li>
+                <li data-bind="pluginEditor: {operation: 'edit', type: 'pane'}">
+                    <i class="icon-wrench icon-white"></i>
+                </li>
+                <li data-bind="pluginEditor: {operation: 'delete', type: 'pane'}">
+                    <i class="icon-trash icon-white"></i>
+                </li>
+            </ul>
+        </header>
+        <section data-bind="foreach: widgets">
+            <div class="sub-section" data-bind="css: 'sub-section-height-' + height()">
+                <div class="widget" data-bind="widget: true, css:{fillsize:fillSize}"></div>
+                <div class="sub-section-tools">
+                    <ul class="board-toolbar">
+                        <!-- ko if:$parent.widgetCanMoveUp($data) -->
+                        <li data-bind="click:$parent.moveWidgetUp"><i class="icon-chevron-up icon-white"></i></li>
+                        <!-- /ko -->
+                        <!-- ko if:$parent.widgetCanMoveDown($data) -->
+                        <li data-bind="click:$parent.moveWidgetDown"><i class="icon-chevron-down icon-white"></i></li>
+                        <!-- /ko -->
+                        <li data-bind="pluginEditor: {operation: 'edit', type: 'widget'}"><i class="icon-wrench icon-white"></i></li>
+                        <li data-bind="pluginEditor: {operation: 'delete', type: 'widget'}"><i class="icon-trash icon-white"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </li>
+</script>
+
+
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:16%">
+  <img src="dis is it.jpg" width="225" height="210">
+  <a href="#" class="w3-bar-item w3-button">Home</a>
+  <a href="#" class="w3-bar-item w3-button">Service Locator</a>
+  <a href="#" class="w3-bar-item w3-button">My Account</a>
+  <a href="#" class="w3-bar-item w3-button">Dashboard</a>
+  <a href="#" class="w3-bar-item w3-button">Feeback</a>
+  <a href="#" class="w3-bar-item w3-button">Cart</a>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 14px;
+    border: none;
+}
+
+.dropup {
+    position: relative;
+    display: inline-block;
+}
+
+.dropup-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    bottom: 50px;
+    z-index: 1;
+}
+
+.dropup-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropup-content a:hover {background-color: #ccc}
+
+.dropup:hover .dropup-content {
+    display: block;
+}
+
+.dropup:hover .dropbtn {
+    background-color: #2980B9;
+}
+</style>
+</head>
+<body>
+
+
+
+<div class="dropup">
+  <button class="dropbtn">Position</button>
+  <div class="dropup-content">
+    <a href="#">Techs</a>
+    <a href="#">Owners</a>
+    <a href="#">Manufacturers</a>
+    <a href="#">Service Provider</a>
+    <a href="#">Lift Locker Admin </a>
+  </div>
+</div>
+
+</div>
+
+
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+* {box-sizing: border-box;}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #e9e9e9;
+}
+
+.topnav a {
+  float: right;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 10px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #2196F3;
+  color: white;
+}
+
+.topnav .search-container {
+  float: right;
+}
+
+.topnav input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+}
+
+.topnav .search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+.topnav .search-container button:hover {
+  background: #ccc;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav .search-container {
+    float: none;
+  }
+  .topnav a, .topnav input[type=text], .topnav .search-container button {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+  .topnav input[type=text] {
+    border: 1px solid #ccc;  
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a class="active" href="#home"></a>
+  <a href="#about"><b>Service Provider Dashboard</b></a>
+  <a href="#contact">Settings</a>
+  <div class="search-container">
+    <form action="/action_page.php">
+      <input type="text" placeholder="Search.." name="search">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+</div>
+
+
+
+</body>
+</html>
+
+
+
+
+<body>
+
+<p align="right">
+<iframe id="SPD" src="SPPage1.html" width="900" height="670" align="right">
+</iframe>
+<button onclick="document.getElementById('SPD').src='SPPage2.html'" class="button"><span>Approved Repairs </span></button>
+</p>
+<p align="right"><button onclick="document.getElementById('SPD').src='SPPage3.html'" class="button"><span>Scheduled Repairs </span></button></p>
+<p align="right"><button onclick="document.getElementById('SPD').src='SPPage4.html'" class="button"><span>Recent Work </span></button></p>
+<p align="right"><button onclick="document.getElementById('SPD').src='SPPage5.html'" class="button"><span>Add New Location </span></button></p>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.button {
+  border-radius: 4px;
+  background-color: #FFFF00;
+  border: none;
+  color: #000000;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+</style>
+</head>
+<body>
+
+
+
+
+
+</body>
+
+</body>
+
+
+
+
+
+
+<head>
+<meta name="viewport444" content="width=device-width, initial-scale=1">
+<style>
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: ;
+   color: black;
+   text-align: right;
+}
+</style>
+</head>
+<body>
+
+<div class="footer">
+  <p><head>
+<meta name="viewport333" content="width=device-width, initial-scale=1">
+<style>
+.button1 {
+  padding: 7px 400px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button1:hover {background-color: #3e8e41}
+
+.button1:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+</style>
+</head>
+<body>
+
+
+<button1 onclick="document.getElementById('SPD').src='Cal.html'" class="button1">Calendar</button>
+
+</body></p>
+</div>
+
+</body>
+
+
+
+
+
+</body>
+</html>
+

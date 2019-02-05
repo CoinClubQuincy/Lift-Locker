@@ -1,0 +1,172 @@
+<?php
+
+    ////// above php in not finnished
+
+  $servername = "35.225.125.47";
+  $username = "Q";
+  $password = "Quincy2222";
+  $database = $_SESSION['email'];
+
+  $conn = mysqli_connect($servername, $username, $password, $database);
+
+  $sql ="SELECT * FROM Approved_Repairs";
+  $result = mysqli_query($conn, $sql) or die(mysqli_error($myConnection)); ;
+
+?>
+
+
+<!DOCTYPE html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .top-container {
+      background-color: #f1f1f1;
+        padding: 30px;
+          text-align: center;
+          }
+
+          .sticky {
+            padding: 0px 10px;
+              background: #555;
+                color: #f1f1f1;
+                }
+
+                .content {
+                  padding:16px;
+                  }
+
+                  .sticky {
+                    position: fixed;
+                      top: 0;
+                        width: 100%;
+                        }
+
+                        .sticky + .content {
+                          padding-top: 102px;
+                          }
+                          </style>
+                          </head>
+                          <body>
+
+                           <div class="content">
+                           <head>
+                           <meta name="viewport" content="width=device-width, initial-scale=1">
+                           <style>
+                            table {
+                                                                                                                                                            border-collapse: collapse;
+                                                                                                                                                                                                                     border-spacing: 0;
+                                                                                                                                                                                                                                                         width: 100%;
+                                                                                                                                                                                                                                                                                               border: 1px solid #ddd;
+                                                                                                                                                                                                                                                                                                                                     }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                 th, td {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                         text-align: left;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   padding: 8px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 tr:nth-child(even){background-color: #f2f2f2}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </style>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </head>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <body>
+
+                          <div class="sticky" id="myHeader222">
+                            <h2 align="center">### Shop Name ###<h2>
+
+                              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+                            </div>
+
+                           <div style="width:500px;height:40px;border:1px solid #000;">This is a rectangle!</div>
+
+                           <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+                           <script>
+                             function changeSrc()
+                             {
+                              var oiFrame1 = document.getElementById('mIframe');
+                              oiFrame.src = 'TechCheck.html';
+                             }
+
+                             function changeSrc()
+                             {
+                              window.location = 'TechCheck.html';;
+                             }
+                             function changeSrc2()
+                             {
+                              var oiFrame1 = document.getElementById('mIframe');
+                              oiFrame.src = 'SPPage1.html';
+                             }
+
+                             function changeSrc2()
+                             {
+                              window.location = 'SPPage1.html';;
+                             }
+                           </script>
+                             <div class="w3-bar">
+                               <button onclick='changeSrc2();'class="w3-bar-item w3-button w3-black">Registerd Lifts</button>
+                               <button class="w3-bar-item w3-button w3-teal">Update Lift Training</button>
+                               <button class="w3-bar-item w3-button w3-red">Update Personal Info</button>
+                               <button onclick='changeSrc();' class="w3-bar-item w3-button w3-yellow">Tech Check</button>
+                             </div>
+
+                           <div>
+                               <table>
+                                 <tr>
+                                 <th>Bay</th>
+                                 <th>Daily Check</th>
+                                 <th>Add New Issue</th>
+                                 <th>Record Main?</th>
+                                 <th>Serial#</th>
+                                 <th>Model</th>
+                                 <th>Brand</th>
+                                 <th>View History</th>
+                                </tr>
+
+
+                               <tbody  style="overflow-x:auto;">
+                               <?php
+                                   while($rows=mysqli_fetch_assoc($result))
+                                 {
+                               ?>
+                                   <tr>
+                                     <td><?php echo $rows['Bay']; ?></td>
+                                     <td><?php echo $rows['Serial']; ?></td>
+                                     <td><?php echo $rows['Model']; ?></td>
+                                     <td><?php echo $rows['Brand']; ?></td>
+                                  </tr>
+                                  <?php
+                                    }
+                                    ?>
+                            </table>
+
+                               </div>
+
+
+                            </div>
+
+
+
+                                <script>
+                                window.onscroll = function() {myFunction()};
+
+                                var header = document.getElementById("myHeader222");
+                                var sticky = header.offsetTop;
+
+                                function myFunction() {
+                                  if (window.pageYOffset > sticky) {
+                                      header.classList.add("sticky");
+                                        } else {
+                                            header.classList.remove("sticky");
+                                              }
+                                              }
+                                              </script>
+
+                                              </body>
+
+<body style="background-color:#FFFFFF;">
+</body>
